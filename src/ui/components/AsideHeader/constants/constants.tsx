@@ -5,7 +5,7 @@ export const ICON = {
     text: 'Filmoiskatel',
     iconSize: 36,
     textSize: 24
-}
+};
 
 export const MENU_ITEMS = [{
     id: '0',
@@ -31,4 +31,4 @@ export const MENU_ITEMS = [{
     id: '4',
     icon: Gear,
     title: 'Settings'
-}]
+}];

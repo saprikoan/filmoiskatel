@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react';
 import { AsideHeader as Header } from '@gravity-ui/navigation';
 
 import { ICON } from './constants/constants.tsx';
@@ -20,4 +20,4 @@ export const AsideHeader = () => {
             menuItems={MENU_ITEMS}
         />
     );
-}
+};
