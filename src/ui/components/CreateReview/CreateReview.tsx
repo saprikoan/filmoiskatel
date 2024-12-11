@@ -20,10 +20,9 @@ export const CreateReview = ({movieId}: CreateReviewProps) => {
     const [reviewType, setReviewType] =  useState<string[]>([]);
 
     const onSubmit = useCallback(async (d: {title: string, review: string}) => {
-        console.log(reviewType);
         await sdk.postReview(d.title, d.review, movieId, reviewType.length ? reviewType[0] : undefined);
-        //window.location.reload();
-    }, []);
+        window.location.reload();
+    }, [reviewType]);
 
     return (
         <div className={cn()}>

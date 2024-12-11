@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import  { SquareDot, Eye} from '@gravity-ui/icons';
-import { Button, Icon, Loader, Text } from '@gravity-ui/uikit';
+import { Button, Icon, Loader, Modal, Text } from '@gravity-ui/uikit';
 import { useParams } from 'react-router-dom';
 
 import block from 'bem-cn-lite';
@@ -18,6 +18,7 @@ import './MoviePage.scss';
 import { ReviewsBlock } from '@/ui/components/ReviewsBlock/ReviewsBlock';
 import { CreateReview } from '@/ui/components/CreateReview/CreateReview';
 import useAuth from '@/ui/auth/useAuth';
+import { getEstimationColor } from '@/ui/utils/getEstimationColor';
 
 const cn = block('movie');
 
@@ -27,7 +28,9 @@ export const MoviePage = () => {
 
     const [isWatched, setIsWatched] = useState(false);
     const [willWatch, setWillWatch] = useState(false);
+    const [estimate, setEstimate] = useState<string | undefined>(undefined);
     const [isEstimated, setIsEstimated] = useState(false);
+    const [modal, toggleModal] = useState(false);
     
     const [movie, setMovie] = useState<Movie>();
     const [loading, setLoading] = useState(false);
@@ -51,7 +54,8 @@ export const MoviePage = () => {
         if (id) {
             setIsWatched(user?.watched?.includes(id) ?? false);
             setWillWatch(user?.willWatch?.includes(id) ?? false);
-            setIsEstimated(user?.estimations?.find(item => item.movieId === id) ? true : false)
+            setIsEstimated(user?.estimations?.find(item => item.movieId === id) ? true : false);
+            setEstimate(user?.estimations?.find(item => item.movieId === id)?.estimate);
         }
 
         
@@ -141,11 +145,17 @@ export const MoviePage = () => {
                             size='l'
                             view={isWatched ? 'outlined-info' : 'normal'}
                             className={cn('button')}
-                            >{
-                                isWatched && <Icon data={Eye}/>}{'Просмотрен'}
-                            </Button>
+                            >
+                                {isWatched && <Icon data={Eye}/>}{'Просмотрен'}
+                        </Button>
                     </div>
-                    <Button>{!isEstimated ? 'Оценить' : 'Удалить оценку'}</Button>
+                    <Button
+                        className={cn('estimate')}
+                        size='l'
+                    >
+                        <Text>{!isEstimated ? 'Оценить' : 'Удалить оценку '}</Text>
+                        {estimate && <Text variant='subheader-3' color={getEstimationColor(estimate)}>{estimate}</Text>}
+                     </Button>
                 </div>
             </div>
             <Text className={cn('description')}>{movie.description}</Text>
@@ -159,6 +169,9 @@ export const MoviePage = () => {
             {reviews && <ReviewsBlock items={reviews}/>}
 
             <img className={cn('backdrop')} src={movie.backdrop.url}/>
+            <Modal>
+                {estimate}
+            </Modal>
         </DefaultPage>
     );
 };
