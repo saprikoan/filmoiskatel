@@ -46,7 +46,7 @@ export const sdk = {
     watched: async (movieId: string) => {
         return await instance.post('/watched', { movieId });
     },
-    estimate: async (movieId: string, estimate: number) => {
-        return await instance.post('/estimate', { movieId, estimate: String(estimate) });
+    estimate: async (movieId: string, estimate?: string) => {
+        return await instance.post('/estimate', { movieId, estimate });
     },
 }

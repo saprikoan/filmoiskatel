@@ -37,13 +37,13 @@ module.exports = function(app, db) {
 
 		const query = { _id }; // Update the document with the matching documentId
 		let update;
-		if (!estimations || !estimations?.find((item) => item.movieId === req.body.movieId)) {
+		if (!estimations?.find((item) => item.movieId === req.body.movieId)) {
 			update = { $set: { estimations: estimations
 				? [...estimations, { movieId: req.body.movieId, estimate: req.body.estimate}]
 				: [{ movieId: req.body.movieId, estimate: req.body.estimate}] } };
 		} else {
-			console.log('here');
-			update = { $set: { estimations: estimations.filter((item) => item.movieId !== req.body.movieId)}};
+			const filteredEstimations = estimations.filter((item) => item.movieId != String(req.body.movieId));
+			update = { $set: { estimations: filteredEstimations}};
 		}
 
 		try {
@@ -64,7 +64,6 @@ module.exports = function(app, db) {
 		if (!willWatch || !willWatch?.includes(req.body.movieId)) {
 			update = { $set: { willWatch: willWatch ? [...willWatch, req.body.movieId] : [req.body.movieId] } };
 		} else {
-			console.log('here');
 			update = { $set: { willWatch: willWatch.filter((item) => item !== req.body.movieId)}};
 		}
 

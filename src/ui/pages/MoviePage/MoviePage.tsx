@@ -19,6 +19,7 @@ import { ReviewsBlock } from '@/ui/components/ReviewsBlock/ReviewsBlock';
 import { CreateReview } from '@/ui/components/CreateReview/CreateReview';
 import useAuth from '@/ui/auth/useAuth';
 import { getEstimationColor } from '@/ui/utils/getEstimationColor';
+import { Estimate } from '@/ui/components/Estimate/Estimate';
 
 const cn = block('movie');
 
@@ -30,7 +31,7 @@ export const MoviePage = () => {
     const [willWatch, setWillWatch] = useState(false);
     const [estimate, setEstimate] = useState<string | undefined>(undefined);
     const [isEstimated, setIsEstimated] = useState(false);
-    const [modal, toggleModal] = useState(false);
+    const [modal, openModal] = useState(false);
     
     const [movie, setMovie] = useState<Movie>();
     const [loading, setLoading] = useState(false);
@@ -102,6 +103,17 @@ export const MoviePage = () => {
         }
     }, [id, isWatched]);
 
+    const onEstimateClick = useCallback(async () => {
+        if(!isEstimated) {
+            openModal(true);
+        }
+
+        else {
+            sdk.estimate(String(id));
+            setIsEstimated(false);
+        }
+    }, [isEstimated, id])
+
     if (isError) {
         return <Text color='warning'>{'Ошибка при загрузке страницы'}</Text>
     }
@@ -152,9 +164,10 @@ export const MoviePage = () => {
                     <Button
                         className={cn('estimate')}
                         size='l'
+                        onClick={onEstimateClick}
                     >
                         <Text>{!isEstimated ? 'Оценить' : 'Удалить оценку '}</Text>
-                        {estimate && <Text variant='subheader-3' color={getEstimationColor(estimate)}>{estimate}</Text>}
+                        {estimate && isEstimated && <Text variant='subheader-3' color={getEstimationColor(estimate)}>{estimate}</Text>}
                      </Button>
                 </div>
             </div>
@@ -169,9 +182,13 @@ export const MoviePage = () => {
             {reviews && <ReviewsBlock items={reviews}/>}
 
             <img className={cn('backdrop')} src={movie.backdrop.url}/>
-            <Modal>
-                {estimate}
-            </Modal>
+
+            {id && 
+                <Modal onClose={() => openModal(false)} open={modal}>
+                    <Estimate onSubmit={(estimate: string) => {openModal(false); setEstimate(estimate); setIsEstimated(true)}} movieId={id}/>
+                </Modal>
+            }
+           
         </DefaultPage>
     );
 };

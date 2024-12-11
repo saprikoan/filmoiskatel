@@ -1,5 +1,5 @@
-import { FC, useMemo } from 'react';
-import { Card, DropdownMenu, Link, Text } from '@gravity-ui/uikit';
+import { FC, useEffect, useMemo, useState } from 'react';
+import { Card, DropdownMenu, Link, Modal, Text } from '@gravity-ui/uikit';
 
 import block from 'bem-cn-lite';
 
@@ -7,6 +7,7 @@ import { sdk } from '@/sdk';
 import useAuth from '@/ui/auth/useAuth';
 
 import './FilmCard.scss';
+import { Estimate } from '../Estimate/Estimate';
 
 
 export type FilmCardProps = {
@@ -37,7 +38,16 @@ export const FilmCard: FC<FilmCardProps> = ({
 }) => {
     const countriesString = countries.join(', ');
     const genresString = genres.join(', ');
+    const [open, setOpen] = useState(false);
+    const [estimated, setEstimated] = useState(false);
     const { user } = useAuth();
+
+
+    console.log(estimated);
+
+    useEffect(() => {
+        setEstimated(user?.estimations?.find((item) => item.movieId === String(id)) ? true : false)
+    }, [user, estimated]);
 
 
     const filmActions = useMemo(() => ([
@@ -48,9 +58,18 @@ export const FilmCard: FC<FilmCardProps> = ({
                 theme: user?.watched?.includes(String(id)) ? 'danger' : 'normal',
             },
             {
-                text:  user?.estimations?.find((item) => item.movieId === String(id)) ? 'Удалить оценку' : 'Оценить',
-                theme:  user?.estimations?.find((item) => item.movieId === String(id)) ? 'danger' : 'normal',
-                action: () => console.log('assing'),
+                text:  estimated ? 'Удалить оценку' : 'Оценить',
+                theme:  estimated ? 'danger' : 'normal',
+                action: () => {
+                    if (estimated) {
+                        sdk.estimate(String(id))
+                        setEstimated(false);
+                        window.location.reload();
+                        return
+                    }
+
+                    setOpen(true);
+                },
             },
         ],
         [
@@ -60,10 +79,10 @@ export const FilmCard: FC<FilmCardProps> = ({
                 theme: user?.willWatch?.includes(String(id)) ? 'danger' : 'normal',
             }
         ],
-    ]), [id]);
+    ]), [id, estimated]);
 
     return (
-        <Card view={'filled'} theme={'normal'} className={cn()}>
+        <Card view={'filled'} theme={'normal'} className={cn()} key={id}>
             <div className={cn('left-content')}>
                 <Text variant={'header-1'}>{rang}</Text>
                 <img className={cn('image')} src={imageURL}/>
@@ -82,6 +101,10 @@ export const FilmCard: FC<FilmCardProps> = ({
                 { /* @ts-ignore */ }
                 <DropdownMenu items={filmActions}/>
             </div>
+
+            <Modal onClose={() => {setOpen(false)}} open={open}>
+                <Estimate onSubmit={() => {window.location.reload()}} movieId={String(id)}/>
+            </Modal>
         </Card>
     );
 }

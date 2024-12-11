@@ -20,8 +20,4 @@ export const routes = [
         path: routeMap.movie,
         element: <GuestGuard><MoviePage /></GuestGuard>,
     },
-    {
-        path: routeMap.profile,
-        element: <GuestGuard><div>{'профиль'}</div></GuestGuard>
-    },
 ]

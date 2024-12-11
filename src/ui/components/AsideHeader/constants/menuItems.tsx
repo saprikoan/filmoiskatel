@@ -1,4 +1,4 @@
-import { TvRetro, Person, Video, PencilToSquare } from '@gravity-ui/icons';
+import { TvRetro, Video, ArrowRightToSquare } from '@gravity-ui/icons';
 
 import { routeMap } from '@/ui/router/routeMap';
 
@@ -7,7 +7,7 @@ export const ICON = {
     text: 'Filmoiskatel',
     iconSize: 24,
     textSize: 15,
-    href: routeMap.feed,
+    href: routeMap.films,
 };
 
 export const MENU_ITEMS = [{
@@ -17,14 +17,12 @@ export const MENU_ITEMS = [{
     link: routeMap.films,
 },
 {
-    id: '1',
-    icon: PencilToSquare,
-    title: 'Рецензии',
-    link: routeMap.reviews,
-},
-{
     id: '2',
-    icon: Person,
-    title: 'Профиль',
-    link: routeMap.profile,
+    icon: ArrowRightToSquare,
+    title: 'Выйти',
+    link: routeMap.films,
+    onItemClick: () => {
+        window.localStorage.removeItem('token');
+        window.location.reload();
+    }
 }];
