@@ -31,13 +31,34 @@ module.exports = function(app, db) {
 		}
 	});
 
+	app.post('/estimate', auth, async (req, res) => {
+		const users = db.collection('users');
+      	const {_id, estimations } = await users.findOne({_id: new ObjectId(req.user.id)});
+
+		const query = { _id }; // Update the document with the matching documentId
+		let update;
+		if (!estimations || !willWatch?.includes(req.body.movieId)) {
+			update = { $set: { willWatch: willWatch ? [...willWatch, req.body.movieId] : [req.body.movieId] } };
+		} else {
+			console.log('here');
+			update = { $set: { willWatch: willWatch.filter((item) => item !== req.body.movieId)}};
+		}
+
+		try {
+			const result = await users.updateOne(query, update);
+			res.send(result);
+		} catch (error) {
+			console.log(error);
+			res.send({error});
+		}
+	});
 	app.post('/willwatch', auth, async (req, res) => {
 		const users = db.collection('users');
       	const {_id, willWatch, watched} = await users.findOne({_id: new ObjectId(req.user.id)});
 
 		const query = { _id }; // Update the document with the matching documentId
 		let update;
-		if (!watched || !willWatch?.includes(req.body.movieId)) {
+		if (!willWatch || !willWatch?.includes(req.body.movieId)) {
 			update = { $set: { willWatch: willWatch ? [...willWatch, req.body.movieId] : [req.body.movieId] } };
 		} else {
 			console.log('here');
