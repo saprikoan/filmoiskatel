@@ -88,9 +88,9 @@ module.exports = function(app, db) {
   app.get('/user', auth, async (req, res) => {
     try {
       const users = db.collection('users');
-      const {username, _id, reviews} = await users.findOne({_id: new ObjectId(req.user.id)});
+      const {username, _id, reviews, willWatch, watched } = await users.findOne({_id: new ObjectId(req.user.id)});
   
-      res.status(200).json({ username, _id, reviews });
+      res.status(200).json({ username, _id, reviews, willWatch, watched });
     } catch (error) {
       res.status(500).json(error);
     }

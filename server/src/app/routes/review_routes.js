@@ -13,6 +13,7 @@ module.exports = function(app, db) {
 		const review = {
 			review: req.body.review,
 			title: req.body.title, 
+			type: req.body.type,
 			movieId: Number(req.body.movieId),
 			author: username,
 			authorId: _id,
@@ -26,6 +27,57 @@ module.exports = function(app, db) {
 			await users.updateOne(query, update);
 			res.send(result);
 		} catch (error) {
+			res.send({error});
+		}
+	});
+
+	app.post('/willwatch', auth, async (req, res) => {
+		const users = db.collection('users');
+      	const {_id, willWatch} = await users.findOne({_id: new ObjectId(req.user.id)});
+
+		const query = { _id }; // Update the document with the matching documentId
+		let update;
+		if (!willWatch.includes(req.body.movieId)) {
+			update = { $set: { willWatch: willWatch ? [...willWatch, req.body.movieId] : [req.body.movieId] } };
+		} else {
+			console.log('here');
+			update = { $set: { willWatch: willWatch.filter((item) => item !== req.body.movieId)}};
+		}
+
+		try {
+			const result = await users.updateOne(query, update);
+			res.send(result);
+		} catch (error) {
+			console.log(error);
+			res.send({error});
+		}
+	});
+
+	app.post('/watched', auth, async (req, res) => {
+		const users = db.collection('users');
+      	const {_id, watched, willWatch} = await users.findOne({_id: new ObjectId(req.user.id)});
+
+		const query = { _id }; // Update the document with the matching documentId
+ 		
+		let update;
+		if(!watched.includes(req.body.movieId)) {
+			update = { $set: { 
+				willWatch: willWatch ? willWatch.filter((item) => item != req.body.movieId) : [],
+				watched: watched ? [...watched, req.body.movieId] : [req.body.movieId],
+			}};
+		} else {
+			update = { $set: { 
+				watched: watched.filter(item => item !== req.body.movieId),
+			}};
+		}
+	
+
+
+		try {
+			const result = await users.updateOne(query, update);
+			res.send(result);
+		} catch (error) {
+			console.log(error);
 			res.send({error});
 		}
 	});

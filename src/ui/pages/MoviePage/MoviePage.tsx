@@ -1,5 +1,6 @@
-import { useEffect, useState } from 'react';
-import { DropdownMenu, Link, Loader, Text } from '@gravity-ui/uikit';
+import { useCallback, useEffect, useState } from 'react';
+import  { SquareDot, Eye} from '@gravity-ui/icons';
+import { Button, Icon, Loader, Text } from '@gravity-ui/uikit';
 import { useParams } from 'react-router-dom';
 
 import block from 'bem-cn-lite';
@@ -16,11 +17,16 @@ import { Review } from '@/sdk/types/review';
 import './MoviePage.scss';
 import { ReviewsBlock } from '@/ui/components/ReviewsBlock/ReviewsBlock';
 import { CreateReview } from '@/ui/components/CreateReview/CreateReview';
+import useAuth from '@/ui/auth/useAuth';
 
 const cn = block('movie');
 
 export const MoviePage = () => {
     const { id } = useParams();
+    const { user } = useAuth();
+
+    const [isWatched, setIsWatched] = useState(false);
+    const [willWatch, setWillWatch] = useState(false)
     
     const [movie, setMovie] = useState<Movie>();
     const [loading, setLoading] = useState(false);
@@ -41,8 +47,17 @@ export const MoviePage = () => {
             setLoading(false);
         }
         
+        if (id) {
+            console.log(user);
+            setIsWatched(user?.watched?.includes(id) ?? false);
+            console.log(user?.watched?.includes(id) ?? false);
+            console.log(user?.willWatch?.includes(id));
+            setWillWatch(user?.willWatch?.includes(id) ?? false);
+        }
+
+        
         void fetchData();
-    }, [id]);
+    }, [id, user?.watched, user, user?.willWatch]);
 
 
     useEffect(() => {
@@ -66,6 +81,23 @@ export const MoviePage = () => {
         void fetchReviews();
         }
     }, [movie]);
+
+    const onWillWatchClick = useCallback(async () => {
+        setWillWatch((value) => !value);
+
+        if (id) {
+            await sdk.willWatch(id);
+        }
+    }, [id]);
+
+    const onWatchedClick = useCallback(async () => {
+        if(!isWatched) setWillWatch(false);
+        setIsWatched((value) => !value);
+
+        if (id) {
+            await sdk.watched(id);
+        }
+    }, [id, isWatched]);
 
     if (isError) {
         return <Text color='warning'>{'Ошибка при загрузке страницы'}</Text>
@@ -94,7 +126,27 @@ export const MoviePage = () => {
             <Text color='misc' id='#anchor'>{movie.slogan}</Text>
             <div className={cn('content')}>
                 <img className={cn('image')} src={movie.poster.url}/>
-                <InfoTable items={infoItems}/>
+                <div className={cn('right-side')}>
+                    <InfoTable items={infoItems}/>
+
+                    <div className={cn('buttons')}>
+                        <Button
+                            onClick={onWillWatchClick}
+                            size='l'
+                            className={cn('button')} 
+                            view={willWatch ? 'outlined-action' :'action'}>
+                                {willWatch && <Icon data={SquareDot}/>}{'Буду смотреть'}
+                            </Button>
+                        <Button 
+                            onClick={onWatchedClick} 
+                            size='l'
+                            view={isWatched ? 'outlined-info' : 'normal'}
+                            className={cn('button')}
+                            >{
+                                isWatched && <Icon data={Eye}/>}{'Просмотрен'}
+                            </Button>
+                    </div>
+                </div>
             </div>
             <Text className={cn('description')}>{movie.description}</Text>
 

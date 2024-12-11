@@ -4,4 +4,6 @@ export type User = {
     _id: string,
     username: string,
     reviews: Review[],
+    willWatch: string[],
+    watched: string[],
 }

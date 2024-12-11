@@ -60,7 +60,7 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
         dispatch({
           type: 'LOGIN',
           payload: {
-            user: res,
+            user: res.data,
           },
         });
       } catch (err) {

@@ -34,10 +34,16 @@ export const sdk = {
     register: async (username: string, password: string): Promise<{data: {token: string}}> => {
         return await instance.post('/signup', { username, password });
     },
-    getUserInfo: async (): Promise<User> => {
+    getUserInfo: async (): Promise<{data: User}> => {
         return await instance.get('/user');
     },
-    postReview: async (title: string, review: string, movieId: string) => {
-        return await instance.post('/reviews', { title, review, movieId });
+    postReview: async (title: string, review: string, movieId: string, type?: string) => {
+        return await instance.post('/reviews', { title, review, movieId, type });
+    },
+    willWatch: async (movieId: string) => {
+        return await instance.post('/willwatch', { movieId });
+    },
+    watched: async (movieId: string) => {
+        return await instance.post('/watched', { movieId });
     }
 }

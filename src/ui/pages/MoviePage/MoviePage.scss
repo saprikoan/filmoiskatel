@@ -15,9 +15,28 @@
 
     &__description {
         display: block;
+        width: 900px;
         padding-bottom: 24px;
     }
     &__image {
         width: 40%;
+    }
+
+    &__right-side {
+        min-width: calc(60% - 24px);
+    }
+
+    &__buttons {
+        display: flex;
+        width: 100%;
+        justify-content: space-between;
+        padding-top: 16px;
+        gap: 8px;
+    }
+
+    &__button {
+        flex-grow: 1;
+        display: flex;
+        gap: 4px;
     }
 }

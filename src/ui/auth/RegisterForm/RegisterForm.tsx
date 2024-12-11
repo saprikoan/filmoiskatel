@@ -15,12 +15,17 @@ export type RegisterFormProps = {
 }
 export const RegisterForm = ({onGoToLoginClick}: RegisterFormProps) => {
     const [error, setError] = useState('');
-    const { register, handleSubmit} = useForm();
+    const { register, handleSubmit } = useForm();
     const { register: signUp } = useAuth();
 
 
 
-    const onSubmit = useCallback(async (d: { username: string, password: string}) => {
+    const onSubmit = useCallback(async (d: { username: string, password: string, confirmPassword: string}) => {
+        if (d.password !== d.confirmPassword) {
+            setError('Пароли не совпадают');
+            return;
+        }
+
         const signUpError = await signUp(d.username, d.password);
 
         if (signUpError) {
@@ -42,7 +47,7 @@ export const RegisterForm = ({onGoToLoginClick}: RegisterFormProps) => {
                 </label>
                 <label>
                     <Text>{'Пароль'}</Text>
-                    <TextInput type={'password'} {...register('confirm-password', {required: true})} />
+                    <TextInput type={'password'} {...register('confirmPassword', {required: true})} />
                 </label>
                 {error && <Text color='danger'>{error}</Text>}
                 <Button type='submit' view='action'>{'Зарегестрироваться'}</Button>
