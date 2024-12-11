@@ -78,6 +78,7 @@ export const FilmCard: FC<FilmCardProps> = ({
                 <Text variant='subheader-1' color={'secondary'}>{imdbRating}</Text>
             </div>
             <div>
+                { /* @ts-ignore */ }
                 <DropdownMenu items={filmActions}/>
             </div>
         </Card>
