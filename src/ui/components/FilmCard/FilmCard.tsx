@@ -43,20 +43,21 @@ export const FilmCard: FC<FilmCardProps> = ({
     const filmActions = useMemo(() => ([
         [
             {
-                text: user?.watched.includes(String(id)) ? 'Не просмотрен' : 'Просмотрен',
+                text: user?.watched?.includes(String(id)) ? 'Не просмотрен' : 'Просмотрен',
                 action: () => sdk.watched(String(id)),
-                theme: user?.watched.includes(String(id)) ? 'danger' : 'normal',
+                theme: user?.watched?.includes(String(id)) ? 'danger' : 'normal',
             },
             {
-                text: 'Оценить',
+                text:  user?.estimations?.find((item) => item.movieId === String(id)) ? 'Удалить оценку' : 'Оценить',
+                theme:  user?.estimations?.find((item) => item.movieId === String(id)) ? 'danger' : 'normal',
                 action: () => console.log('assing'),
             },
         ],
         [
             {
-                text:  user?.willWatch.includes(String(id)) ? 'Не буду смотреть' : 'Буду смотреть',
+                text:  user?.willWatch?.includes(String(id)) ? 'Не буду смотреть' : 'Буду смотреть',
                 action: () => sdk.willWatch(String(id)),
-                theme: user?.willWatch.includes(String(id)) ? 'danger' : 'normal',
+                theme: user?.willWatch?.includes(String(id)) ? 'danger' : 'normal',
             }
         ],
     ]), [id]);

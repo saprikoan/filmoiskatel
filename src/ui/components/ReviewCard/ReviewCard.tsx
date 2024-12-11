@@ -29,7 +29,7 @@ export const ReviewCard = ({item}: ReviewCardProps) => {
     const theme = cardTypesMap[reviewType] as 'success' | 'info' | 'danger';
 
     return (
-        <Card theme={theme} className={cn()}>
+        <Card theme={theme ?? 'info'} className={cn()}>
             <UserLabel size='m'>{item.author}</UserLabel>
 
             <div className={cn('content')}>

@@ -37,11 +37,13 @@ module.exports = function(app, db) {
 
 		const query = { _id }; // Update the document with the matching documentId
 		let update;
-		if (!estimations || !willWatch?.includes(req.body.movieId)) {
-			update = { $set: { willWatch: willWatch ? [...willWatch, req.body.movieId] : [req.body.movieId] } };
+		if (!estimations || !estimations?.find((item) => item.movieId === req.body.movieId)) {
+			update = { $set: { estimations: estimations
+				? [...estimations, { movieId: req.body.movieId, estimate: req.body.estimate}]
+				: [{ movieId: req.body.movieId, estimate: req.body.estimate}] } };
 		} else {
 			console.log('here');
-			update = { $set: { willWatch: willWatch.filter((item) => item !== req.body.movieId)}};
+			update = { $set: { estimations: estimations.filter((item) => item.movieId !== req.body.movieId)}};
 		}
 
 		try {
@@ -52,6 +54,7 @@ module.exports = function(app, db) {
 			res.send({error});
 		}
 	});
+
 	app.post('/willwatch', auth, async (req, res) => {
 		const users = db.collection('users');
       	const {_id, willWatch, watched} = await users.findOne({_id: new ObjectId(req.user.id)});

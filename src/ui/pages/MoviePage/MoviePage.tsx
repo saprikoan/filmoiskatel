@@ -26,7 +26,8 @@ export const MoviePage = () => {
     const { user } = useAuth();
 
     const [isWatched, setIsWatched] = useState(false);
-    const [willWatch, setWillWatch] = useState(false)
+    const [willWatch, setWillWatch] = useState(false);
+    const [isEstimated, setIsEstimated] = useState(false);
     
     const [movie, setMovie] = useState<Movie>();
     const [loading, setLoading] = useState(false);
@@ -48,11 +49,9 @@ export const MoviePage = () => {
         }
         
         if (id) {
-            console.log(user);
             setIsWatched(user?.watched?.includes(id) ?? false);
-            console.log(user?.watched?.includes(id) ?? false);
-            console.log(user?.willWatch?.includes(id));
             setWillWatch(user?.willWatch?.includes(id) ?? false);
+            setIsEstimated(user?.estimations?.find(item => item.movieId === id) ? true : false)
         }
 
         
@@ -146,6 +145,7 @@ export const MoviePage = () => {
                                 isWatched && <Icon data={Eye}/>}{'Просмотрен'}
                             </Button>
                     </div>
+                    <Button>{!isEstimated ? 'Оценить' : 'Удалить оценку'}</Button>
                 </div>
             </div>
             <Text className={cn('description')}>{movie.description}</Text>

@@ -6,4 +6,5 @@ export type User = {
     reviews: Review[],
     willWatch: string[],
     watched: string[],
+    estimations: { movieId: string, estimate: string}[],
 }
