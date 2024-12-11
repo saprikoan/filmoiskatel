@@ -5,11 +5,13 @@ const db             = require('../config/db');
 const cors 		 = require('cors');
 const app            = express();
 const port = 8000;
-app.use(bodyParser.urlencoded({ extended: true }));
+// app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 app.use(cors({
 	origin: 'http://localhost:5173',
 	methods: 'GET, POST, OPTIONS, PUT, PATCH, DELETE',
-	allowedHeaders: 'X-Requested-With,content-type',
+	allowedHeaders: 'X-Requested-With,content-type,x-auth-token',
 	credentials: true,
 }));
 

@@ -24,10 +24,8 @@ export const FilmList: FC = () => {
         setIsLoading(true);
         sdk.getMovies().then((response) => {
             setMovies(response.data);
-            console.log(response.data);
             setIsLoading(false);
         });
-        console.log(movies);
     }, []);
 
 

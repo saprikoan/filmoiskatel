@@ -42,7 +42,7 @@ export const FilmCard: FC<FilmCardProps> = ({
                 <Text variant={'header-1'}>{rang}</Text>
                 <img className={cn('image')} src={imageURL}/>
                 <div className={cn('info')}>
-                    <Link className={cn('title')} href={`/films/${id}`}>{ruTitle}</Link>
+                    <Link className={cn('title')} href={`/films/${id}#anchor`}>{ruTitle}</Link>
                     <Text>{enTitle}</Text>
                     <Text color={'secondary'}>{`${countriesString}`}</Text>
                     <Text>{`${genresString}`}</Text>

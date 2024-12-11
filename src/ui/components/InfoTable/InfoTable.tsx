@@ -7,8 +7,6 @@ import './InfoTable.scss';
 const cn = block('info-table');
 
 export const InfoTable = ({items}: {items: {title: string, value: string | number}[]}) => {
-    console.log(items);
-
     return(
         <div className={cn()}>
             {

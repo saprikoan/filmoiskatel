@@ -32,10 +32,10 @@ export const ReviewCard = ({item}: ReviewCardProps) => {
         <Card theme={theme} className={cn()}>
             <UserLabel size='m'>{item.author}</UserLabel>
 
-            <pre className={cn('content')}>
+            <div className={cn('content')}>
                 <Text variant='subheader-2' color='brand'>{item.title}</Text>
                 <Text className={cn('g')} dangerouslySetInnerHTML={{__html: item.review}}></Text>
-            </pre>
+            </div>
         </Card>
     )
 }

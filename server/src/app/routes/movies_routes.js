@@ -5,11 +5,6 @@ const { apiToken } = require('../../../config/token');
 module.exports = function(app, db) {
 	 // Обработчик GET-запроса для получения всех отзывов с заданным kpID
 	 app.get('/movies', async (req, res) => {
-        console.log('here');
-
-        console.log(req.params);
-        console.log(req.query);
-
         try {
 
             if (req.query.search) {
@@ -23,8 +18,6 @@ module.exports = function(app, db) {
                       'X-API-KEY': apiToken,
                     }
                   });
-
-                  console.log('search')
 
                 res.status(200).json(movies.data.docs);
                 return;
@@ -71,9 +64,6 @@ module.exports = function(app, db) {
 	});
 
     app.get('/movie', async (req, res) => {
-        console.log('here');
-        console.log(req.query);
-
         try {
             const movie = await axios.get(`https://api.kinopoisk.dev/v1.4/movie/${Number(req.query.id)}`, {
                 headers: {
@@ -82,7 +72,6 @@ module.exports = function(app, db) {
                 }
             });
 
-            console.log(movie)
             res.status(200).json(movie.data);
 
         } catch (error) {

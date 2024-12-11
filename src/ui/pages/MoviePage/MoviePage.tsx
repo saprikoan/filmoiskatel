@@ -20,8 +20,6 @@ const cn = block('movie');
 
 export const MoviePage = () => {
     const { id } = useParams();
-    console.log(id);
-
     
     const [movie, setMovie] = useState<Movie>();
     const [loading, setLoading] = useState(false);
@@ -56,7 +54,6 @@ export const MoviePage = () => {
                 setLoading(true);
                 const reviewsResponse = await sdk.getReviews(movie.id);
                 setReviews(reviewsResponse.data);
-                console.log(reviewsResponse.data);
             } catch (error) {
                 setIsErorr(true);
                 console.error(error);
@@ -92,21 +89,19 @@ export const MoviePage = () => {
     ]
 
     return (
-        <div>
+        <DefaultPage title={movie.name}>
+            <Text color='misc' id='#anchor'>{movie.slogan}</Text>
+            <div className={cn('content')}>
+                <img className={cn('image')} src={movie.poster.url}/>
+                <InfoTable items={infoItems}/>
+            </div>
+            <Text className={cn('description')}>{movie.description}</Text>
+
+            {reviewsLoading && <Loader/>}
+
+            {reviews && <ReviewsBlock items={reviews}/>}
+
             <img className={cn('backdrop')} src={movie.backdrop.url}/>
-
-            <DefaultPage title={movie.name}>
-                <Text color='misc'>{movie.slogan}</Text>
-                <div className={cn('content')}>
-                    <img className={cn('image')} src={movie.poster.url}/>
-                    <InfoTable items={infoItems}/>
-                </div>
-                <Text className={cn('description')}>{movie.description}</Text>
-
-                {reviewsLoading && <Loader/>}
-
-                {reviews && <ReviewsBlock items={reviews}/>}
-            </DefaultPage>
-        </div>
+        </DefaultPage>
     );
 };

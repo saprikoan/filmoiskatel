@@ -6,12 +6,15 @@ import '@gravity-ui/uikit/styles/fonts.css';
 import '@gravity-ui/uikit/styles/styles.css';
 
 import './App.scss'
+import AuthContext, { AuthProvider } from './ui/auth/AuthContext.tsx';
 
 
 function App() {
   return (
     <ThemeProvider theme='dark'>
-      <AsideHeader/>
+      <AuthProvider>
+        <AsideHeader/>
+      </AuthProvider>
     </ThemeProvider>
   )
 }

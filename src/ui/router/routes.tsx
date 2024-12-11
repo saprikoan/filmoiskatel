@@ -1,3 +1,4 @@
+import { GuestGuard } from "../auth/GuestGuard";
 import { FilmsPage } from "../pages/FilmsPage/FilmsPage";
 import { MoviePage } from '../pages/MoviePage/MoviePage';
 import { routeMap } from "./routeMap";
@@ -29,6 +30,6 @@ export const routes = [
     },
     {
         path: routeMap.profile,
-        element: <div>{'профиль'}</div>
-    }
+        element: <GuestGuard><div>{'профиль'}</div></GuestGuard>
+    },
 ]
