@@ -31,7 +31,7 @@ export const CreateReview = ({movieId}: CreateReviewProps) => {
             <form className={cn('form')} onSubmit={handleSubmit(onSubmit as SubmitHandler<FieldValues>)}>
                 <label>
                     <Select onUpdate={(value) => setReviewType(value)} options={[
-                        {content: 'Позитивный', value: 'Положительный'},
+                        {content: 'Позитивный', value: 'Позитивны'},
                         {content: 'Нейтральный', value: 'Нейтральный'},
                         {content: 'Негативный', value: 'Негативный'},
                     ]} className={cn('select')} label='Тип рецензии' {...register('type')} />
