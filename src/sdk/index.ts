@@ -37,4 +37,7 @@ export const sdk = {
     getUserInfo: async (): Promise<User> => {
         return await instance.get('/user');
     },
+    postReview: async (title: string, review: string, movieId: string) => {
+        return await instance.post('/reviews', { title, review, movieId });
+    }
 }

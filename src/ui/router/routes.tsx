@@ -18,7 +18,7 @@ export const routes = [
     },
     {
         path: routeMap.movie,
-        element: <MoviePage />,
+        element: <GuestGuard><MoviePage /></GuestGuard>,
     },
     {
         path: routeMap.notifications,

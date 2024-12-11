@@ -15,6 +15,7 @@ import { Review } from '@/sdk/types/review';
 
 import './MoviePage.scss';
 import { ReviewsBlock } from '@/ui/components/ReviewsBlock/ReviewsBlock';
+import { CreateReview } from '@/ui/components/CreateReview/CreateReview';
 
 const cn = block('movie');
 
@@ -51,14 +52,14 @@ export const MoviePage = () => {
             }
 
             try {
-                setLoading(true);
+                setRevieswLaoding(true);
                 const reviewsResponse = await sdk.getReviews(movie.id);
                 setReviews(reviewsResponse.data);
             } catch (error) {
                 setIsErorr(true);
                 console.error(error);
             }
-            setLoading(false);
+            setRevieswLaoding(false);
         }
 
         if(movie) {
@@ -96,6 +97,10 @@ export const MoviePage = () => {
                 <InfoTable items={infoItems}/>
             </div>
             <Text className={cn('description')}>{movie.description}</Text>
+
+            
+
+            {id && <CreateReview movieId={id}/>}
 
             {reviewsLoading && <Loader/>}
 

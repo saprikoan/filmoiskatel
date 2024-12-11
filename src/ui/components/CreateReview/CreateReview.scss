@@ -1,0 +1,13 @@
+.create-review {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+
+    padding-bottom: 24px;
+
+    &__form {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+}

@@ -19,13 +19,13 @@ export const LoginForm = ({onGoToSignUpClick}: LoginFormProps) => {
     const { logIn } = useAuth();
 
 
-    const onSubmit = useCallback((async (d: {username: string, password: string}) => {
+    const onSubmit = useCallback(async (d: {username: string, password: string}) => {
         const loginError = await logIn(d.username, d.password);
 
         if (loginError) {
             setError(loginError);
         }
-    }), [logIn, setError]);
+    }, [logIn, setError]);
 
     return (
         <div className={cn()}>
