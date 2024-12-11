@@ -8,6 +8,7 @@ import useAuth from '@/ui/auth/useAuth';
 
 import './FilmCard.scss';
 import { Estimate } from '../Estimate/Estimate';
+import { getEstimationColor } from '@/ui/utils/getEstimationColor';
 
 
 export type FilmCardProps = {
@@ -40,13 +41,15 @@ export const FilmCard: FC<FilmCardProps> = ({
     const genresString = genres.join(', ');
     const [open, setOpen] = useState(false);
     const [estimated, setEstimated] = useState(false);
+    const [estimation, setEstimation] = useState('');
     const { user } = useAuth();
 
 
     console.log(estimated);
 
     useEffect(() => {
-        setEstimated(user?.estimations?.find((item) => item.movieId === String(id)) ? true : false)
+        setEstimated(user?.estimations?.find((item) => item.movieId === String(id)) ? true : false);
+        setEstimation(user?.estimations?.find((item) => item.movieId === String(id))?.estimate ?? '');
     }, [user, estimated]);
 
 
@@ -91,10 +94,11 @@ export const FilmCard: FC<FilmCardProps> = ({
                     <Text>{enTitle}</Text>
                     <Text color={'secondary'}>{`${countriesString}`}</Text>
                     <Text>{`${genresString}`}</Text>
+                    {estimated && <Text variant='subheader-2'>{'Ваша оценка: '}<Text variant={'subheader-3'} color={getEstimationColor(estimation)}>{estimation}</Text></Text>}
                 </div>
             </div>
             <div className={cn('ratings')}>
-                <Text variant='subheader-3'>{kpRating}</Text>
+                <Text variant='subheader-3' color={getEstimationColor(String(kpRating))}>{kpRating}</Text>
                 <Text variant='subheader-1' color={'secondary'}>{imdbRating}</Text>
             </div>
             <div>
@@ -103,7 +107,7 @@ export const FilmCard: FC<FilmCardProps> = ({
             </div>
 
             <Modal onClose={() => {setOpen(false)}} open={open}>
-                <Estimate onSubmit={() => {window.location.reload()}} movieId={String(id)}/>
+                <Estimate onSubmit={(estimation) => {setEstimation(estimation); window.location.reload()}} movieId={String(id)}/>
             </Modal>
         </Card>
     );
