@@ -14,19 +14,11 @@ export const routes = [
     },
     {
         path: routeMap.films,
-        element: <FilmsPage/>
+        element: <GuestGuard><FilmsPage/></GuestGuard>
     },
     {
         path: routeMap.movie,
         element: <GuestGuard><MoviePage /></GuestGuard>,
-    },
-    {
-        path: routeMap.notifications,
-        element: <div>{'уведомления'}</div>
-    },
-    {
-        path: routeMap.settings,
-        element: <div>{'настройки'}</div>
     },
     {
         path: routeMap.profile,

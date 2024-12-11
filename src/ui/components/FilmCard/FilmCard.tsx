@@ -3,8 +3,8 @@ import { Card, DropdownMenu, Link, Text } from '@gravity-ui/uikit';
 
 import block from 'bem-cn-lite';
 
-import { filmActions } from './constants/filmActions';
 import './FilmCard.scss';
+import { sdk } from '@/sdk';
 
 export type FilmCardProps = {
     id: number,
@@ -25,7 +25,6 @@ export const FilmCard: FC<FilmCardProps> = ({
     id,
     ruTitle,
     enTitle,
-    releaseYear,
     imdbRating,
     kpRating,
     imageURL,
@@ -36,6 +35,25 @@ export const FilmCard: FC<FilmCardProps> = ({
     const countriesString = countries.join(', ');
     const genresString = genres.join(', ');
 
+
+    const filmActions = [
+        [
+            {
+                text: 'Просмотрен',
+                action: () => sdk.watched(String(id)),
+            },
+            {
+                text: 'Оценить',
+                action: () => console.log('assing'),
+            },
+        ],
+        [
+            {
+                text: 'Буду смотреть',
+                action: () => sdk.willWatch(String(id)),
+            }
+        ],
+    ]
     return (
         <Card view={'filled'} theme={'normal'} className={cn()}>
             <div className={cn('left-content')}>

@@ -1,4 +1,4 @@
-import { TvRetro, Bell, Gear, Person, Video, PencilToSquare } from '@gravity-ui/icons';
+import { TvRetro, Person, Video, PencilToSquare } from '@gravity-ui/icons';
 
 import { routeMap } from '@/ui/router/routeMap';
 
@@ -27,16 +27,4 @@ export const MENU_ITEMS = [{
     icon: Person,
     title: 'Профиль',
     link: routeMap.profile,
-},
-{
-    id: '3',
-    icon: Bell,
-    title: 'Уведомления',
-    link: routeMap.notifications,
-},
-{
-    id: '4',
-    icon: Gear,
-    title: 'Настройки',
-    link: routeMap.settings,
 }];

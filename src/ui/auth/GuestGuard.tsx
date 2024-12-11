@@ -12,12 +12,6 @@ export const GuestGuard = ({ children }: PropsWithChildren) => {
   const [modalOpen, setModalOpen] = useState(false);
   const [isLogin, setIsLogin] = useState(true);
 
-  const handleModalClose = useCallback(() => {
-    setModalOpen(false);
-    router.navigate('/films');
-  }, [modalOpen])
-
-
   useEffect(() => {
     if (!isAuthenticated) {
       setModalOpen(true);
@@ -26,7 +20,7 @@ export const GuestGuard = ({ children }: PropsWithChildren) => {
 
   if (!isAuthenticated) {
     return (
-        <Modal open={modalOpen} onClose={handleModalClose}>
+        <Modal open={true}>
             {isLogin && <LoginForm onGoToSignUpClick={() => setIsLogin(false)}/>}
             {!isLogin && <RegisterForm onGoToLoginClick={() => setIsLogin(true)}/>}
         </Modal>
