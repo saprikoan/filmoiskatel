@@ -33,11 +33,11 @@ module.exports = function(app, db) {
 
 	app.post('/willwatch', auth, async (req, res) => {
 		const users = db.collection('users');
-      	const {_id, willWatch} = await users.findOne({_id: new ObjectId(req.user.id)});
+      	const {_id, willWatch, watched} = await users.findOne({_id: new ObjectId(req.user.id)});
 
 		const query = { _id }; // Update the document with the matching documentId
 		let update;
-		if (!willWatch.includes(req.body.movieId)) {
+		if (!watched || !willWatch?.includes(req.body.movieId)) {
 			update = { $set: { willWatch: willWatch ? [...willWatch, req.body.movieId] : [req.body.movieId] } };
 		} else {
 			console.log('here');
@@ -60,7 +60,7 @@ module.exports = function(app, db) {
 		const query = { _id }; // Update the document with the matching documentId
  		
 		let update;
-		if(!watched.includes(req.body.movieId)) {
+		if(!watched || !watched?.includes(req.body.movieId)) {
 			update = { $set: { 
 				willWatch: willWatch ? willWatch.filter((item) => item != req.body.movieId) : [],
 				watched: watched ? [...watched, req.body.movieId] : [req.body.movieId],

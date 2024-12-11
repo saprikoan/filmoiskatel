@@ -1,10 +1,13 @@
-import { FC } from 'react';
+import { FC, useMemo } from 'react';
 import { Card, DropdownMenu, Link, Text } from '@gravity-ui/uikit';
 
 import block from 'bem-cn-lite';
 
-import './FilmCard.scss';
 import { sdk } from '@/sdk';
+import useAuth from '@/ui/auth/useAuth';
+
+import './FilmCard.scss';
+
 
 export type FilmCardProps = {
     id: number,
@@ -34,13 +37,15 @@ export const FilmCard: FC<FilmCardProps> = ({
 }) => {
     const countriesString = countries.join(', ');
     const genresString = genres.join(', ');
+    const { user } = useAuth();
 
 
-    const filmActions = [
+    const filmActions = useMemo(() => ([
         [
             {
-                text: 'Просмотрен',
+                text: user?.watched.includes(String(id)) ? 'Не просмотрен' : 'Просмотрен',
                 action: () => sdk.watched(String(id)),
+                theme: user?.watched.includes(String(id)) ? 'danger' : 'normal',
             },
             {
                 text: 'Оценить',
@@ -49,11 +54,13 @@ export const FilmCard: FC<FilmCardProps> = ({
         ],
         [
             {
-                text: 'Буду смотреть',
+                text:  user?.willWatch.includes(String(id)) ? 'Не буду смотреть' : 'Буду смотреть',
                 action: () => sdk.willWatch(String(id)),
+                theme: user?.willWatch.includes(String(id)) ? 'danger' : 'normal',
             }
         ],
-    ]
+    ]), [id]);
+
     return (
         <Card view={'filled'} theme={'normal'} className={cn()}>
             <div className={cn('left-content')}>
